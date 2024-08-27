@@ -1,0 +1,99 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:santai_technician/app/theme/app_theme.dart';
+import '../controllers/verification_id_controller.dart';
+import 'package:santai_technician/app/common/widgets/custom_progress_indicator.dart';
+import 'package:santai_technician/app/common/widgets/custom_image_uploader.dart';
+import 'package:santai_technician/app/common/widgets/custom_elvbtn_001.dart';
+
+class VerificationIdView extends GetView<VerificationIdController> {
+  const VerificationIdView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Color primary_300 = Theme.of(context).colorScheme.primary_300;
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 40),
+                CustomProgressIndicator(
+                  totalSteps: 5,
+                  currentStep: 4,
+                  activeColor: primary_300,
+                  inactiveColor: Colors.grey[300]!,
+                  height: 3,
+                  spacing: 4,
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'National ID\nVerification',
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'We need a photo of your National ID',
+                  style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'To complete your registration u must upload a photo of your national ID card front and back.',
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Capture Instructions',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Please positions your doucment so that it fills the frame of your screen',
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 10),
+                _buildInstructionItem(Icons.crop_free, 'Place it onf a flat surface'),
+                const SizedBox(height: 5),
+                _buildInstructionItem(Icons.blur_off, 'Avoid glare, shaking, and blur'),
+                const SizedBox(height: 20),
+                Obx(() => CustomImageUploader(
+                  selectedImage: controller.frontIdImage.value,
+                  onImageSourceSelected: (source) => controller.pickImage(source, true),
+                  height: 150,
+                  uploadText: 'Front',
+                )),
+                const SizedBox(height: 20),
+                Obx(() => CustomImageUploader(
+                  selectedImage: controller.backIdImage.value,
+                  onImageSourceSelected: (source) => controller.pickImage(source, false),
+                  height: 150,
+                  uploadText: 'Back',
+                )),
+                const SizedBox(height: 30),
+                Obx(() => CustomElevatedButton(
+                  text: 'Next',
+                  // onPressed: controller.canProceed.value ? controller.onNextPressed : null,
+                  onPressed: controller.isLoading.value ? null : controller.onNextPressed,
+                  isLoading: controller.isLoading.value,
+                )),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInstructionItem(IconData icon, String text) {
+    return Row(
+      children: [
+        Icon(icon, size: 24),
+        const SizedBox(width: 10),
+        Text(text, style: const TextStyle(fontSize: 16)),
+      ],
+    );
+  }
+}

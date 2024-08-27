@@ -1,0 +1,63 @@
+name: santai_technician
+version: 1.0.0+1
+publish_to: none
+description: A new Flutter project.
+environment: 
+  sdk: '>=3.4.3 <4.0.0'
+
+dependencies: 
+  cupertino_icons: ^1.0.6
+  get: 4.6.6
+  image_picker: 1.1.2
+  dropdown_search: 5.0.6
+  intl_phone_field: 3.2.0
+  fluttertoast: 8.2.8
+  geolocator: ^12.0.0
+  geocoding: 3.0.0
+  flutter_secure_storage: 9.2.2
+  shared_preferences: 2.3.2
+  timezone: 0.9.4
+  intl: 0.19.0
+  signalr_core: 1.1.2
+  flutter_local_notifications: 17.2.2
+  device_info_plus: 10.1.2
+  permission_handler: 11.3.1
+  qr_code_scanner: 1.0.1
+  timeline_tile: 2.0.0
+  google_maps_flutter: 2.9.0
+  google_sign_in: 6.2.1
+  flutter: 
+    sdk: flutter
+
+dev_dependencies: 
+  flutter_launcher_icons: ^0.13.1
+  flutter_lints: 4.0.0
+  flutter_test: 
+    sdk: flutter
+
+flutter: 
+  assets: 
+    - assets/images/splash_image.png
+    - assets/images/google_logo.png
+    - assets/images/facebook_logo.png
+    - assets/images/company_logo.png
+    - assets/images/app_icon.png
+    - assets/images/completed.png
+    - assets/icons/ic_notification.png
+  fonts: 
+    - family: Saira
+      fonts: 
+        - asset: assets/fonts/saira/Saira-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/saira/Saira-Bold.ttf
+          weight: 600
+  uses-material-design: true
+
+flutter_launcher_icons: 
+  android: launcher_icon
+  image_path: assets/images/app_icon.png
+  ios: true
+  min_sdk_android: 21
+  remove_alpha_ios: true
+  name: "Santai Technician"
+
