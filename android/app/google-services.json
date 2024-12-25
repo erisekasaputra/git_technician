@@ -1,0 +1,66 @@
+{
+  "project_info": {
+    "project_number": "1065462126306",
+    "project_id": "santaitechnologyapp",
+    "storage_bucket": "santaitechnologyapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065462126306:android:e1c27246d1bae98e4e70bb",
+        "android_client_info": {
+          "package_name": "com.santaitechnology.santai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1065462126306-sla57ni7q7n8mhs2v0miqa6u5ms8lrsi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santaitechnology.santai",
+            "certificate_hash": "5a56db1cc0efdec5f983710def16ff5e1a667064"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2Kl1WdtXIdlnu4wnxcVYV8FTWMUEu39c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065462126306:android:fcc05c528643810e4e70bb",
+        "android_client_info": {
+          "package_name": "com.santaitechnology.santai_technician"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1065462126306-95cnclqr9ed2c110df8eq65od57cioo6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santaitechnology.santai_technician",
+            "certificate_hash": "564d47b1d18123aed55cb95ea2f4e0b3f481de48"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2Kl1WdtXIdlnu4wnxcVYV8FTWMUEu39c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -22,7 +22,7 @@ class JobChecklistView extends GetView<JobChecklistController> {
             onPressed: () => Get.back(),
           ),
         ),
-        leadingWidth: 60,
+        leadingWidth: 100,
         title: const Text(
           'Job Checklist',
           style: TextStyle(
@@ -39,21 +39,18 @@ class JobChecklistView extends GetView<JobChecklistController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Service Checklist',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'OrderID #${controller.orderId}',
-                    style: TextStyle(color: Colors.grey[600]),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-              ...controller.checklistItems.map((item) => _buildChecklistItem(item, context)),
+              ...controller.checklistItems
+                  .map((item) => _buildChecklistItem(item, context)),
               const SizedBox(height: 24),
               const Text(
                 'Vehicle Update',
@@ -64,7 +61,7 @@ class JobChecklistView extends GetView<JobChecklistController> {
                 controller: controller.vehicleUpdateController,
                 maxLines: 4,
                 decoration: InputDecoration(
-                  hintText: 'Placeholder',
+                  hintText: '',
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
@@ -87,16 +84,29 @@ class JobChecklistView extends GetView<JobChecklistController> {
                 alignment: Alignment.centerRight,
                 child: Text(
                   '${controller.vehicleUpdateController.text.length}/200',
-                  style: TextStyle(color: Colors.black),
+                  style: const TextStyle(color: Colors.black),
                 ),
               ),
               const SizedBox(height: 24),
               Obx(() => CustomElevatedButton(
-                  text: 'Next',
-                  onPressed: controller.isLoading.value ? null : controller.onNextPressed,
-                  isLoading: controller.isLoading.value,
-                )),
-    
+                    text: 'Complete',
+                    onPressed: controller.isLoading.value
+                        ? null
+                        : controller.completeOrderAction,
+                    isLoading: controller.isLoading.value,
+                  )),
+              const SizedBox(
+                height: 10,
+              ),
+              // Obx(() => CustomElevatedButton(
+              //       color: Colors.red,
+              //       textColor: Colors.white,
+              //       text: 'Incomplete',
+              //       onPressed: controller.isLoading.value
+              //           ? null
+              //           : controller.incompleteOrderAction,
+              //       isLoading: controller.isLoading.value,
+              //     )),
             ],
           ),
         ),
@@ -104,28 +114,28 @@ class JobChecklistView extends GetView<JobChecklistController> {
     );
   }
 
-Widget _buildChecklistItem(ChecklistItem item, BuildContext context) {
-  final Color primary_300 = Theme.of(context).colorScheme.primary_300;
-  final Color borderInput_01 = Theme.of(context).colorScheme.borderInput_01;
-  return Obx(() => Container(
-    margin: const EdgeInsets.only(bottom: 8),
-    decoration: BoxDecoration(
-      border: Border.all(
-        color: item.isChecked.value ? primary_300 : borderInput_01,
-        width: item.isChecked.value ? 2 : 1,
-      ),
-      borderRadius: BorderRadius.circular(20),
-    ),
-    child: CheckboxListTile(
-      title: Text(item.title),
-      value: item.isChecked.value,
-      onChanged: (bool? value) {
-        item.isChecked.value = value ?? false;
-      },
-      activeColor: primary_300,
-      checkColor: Colors.white,
-      side: BorderSide(color: borderInput_01, width: 1),
-    ),
-  ));
-}
+  Widget _buildChecklistItem(ChecklistItem item, BuildContext context) {
+    final Color primary_300 = Theme.of(context).colorScheme.primary_300;
+    final Color borderInput_01 = Theme.of(context).colorScheme.borderInput_01;
+    return Obx(() => Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: item.isChecked.value ? primary_300 : borderInput_01,
+              width: item.isChecked.value ? 2 : 1,
+            ),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: CheckboxListTile(
+            title: Text(item.description),
+            value: item.isChecked.value,
+            onChanged: (bool? value) {
+              item.isChecked.value = value ?? false;
+            },
+            activeColor: primary_300,
+            checkColor: Colors.white,
+            side: BorderSide(color: borderInput_01, width: 1),
+          ),
+        ));
+  }
 }

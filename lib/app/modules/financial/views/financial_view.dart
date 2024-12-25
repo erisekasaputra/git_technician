@@ -21,7 +21,7 @@ class FinancialView extends GetView<FinancialController> {
             onPressed: () => Get.back(),
           ),
         ),
-        leadingWidth: 60,
+        leadingWidth: 100,
         title: const Text(
           'Financial',
           style: TextStyle(
@@ -38,7 +38,10 @@ class FinancialView extends GetView<FinancialController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Center(child: Text('Total Fees', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+              const Center(
+                  child: Text('Total Fees',
+                      style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold))),
               const SizedBox(height: 20),
               _buildTotalFeesChart(context),
               const SizedBox(height: 20),
@@ -82,9 +85,10 @@ class FinancialView extends GetView<FinancialController> {
               children: [
                 const Text('RM', style: TextStyle(fontSize: 20)),
                 Obx(() => Text(
-                  controller.totalFees.toStringAsFixed(2),
-                  style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                )),
+                      controller.totalFees.toStringAsFixed(2),
+                      style: const TextStyle(
+                          fontSize: 32, fontWeight: FontWeight.bold),
+                    )),
               ],
             ),
           ],
@@ -106,19 +110,25 @@ class FinancialView extends GetView<FinancialController> {
     );
   }
 
-  Widget _buildWeekButton(String text, int index, Color color, Color borderColor) {
+  Widget _buildWeekButton(
+      String text, int index, Color color, Color borderColor) {
     return Obx(() => ElevatedButton(
-      onPressed: () => controller.selectWeek(index),
-      style: ElevatedButton.styleFrom(
-        foregroundColor: controller.selectedWeek.value == index ? Colors.white : Colors.black, 
-        backgroundColor: controller.selectedWeek.value == index ? color : Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: controller.selectedWeek.value == index ? BorderSide.none : BorderSide(color: borderColor, width: 1),
-        ),
-      ),
-      child: Text(text),
-    ));
+          onPressed: () => controller.selectWeek(index),
+          style: ElevatedButton.styleFrom(
+            foregroundColor: controller.selectedWeek.value == index
+                ? Colors.white
+                : Colors.black,
+            backgroundColor:
+                controller.selectedWeek.value == index ? color : Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+              side: controller.selectedWeek.value == index
+                  ? BorderSide.none
+                  : BorderSide(color: borderColor, width: 1),
+            ),
+          ),
+          child: Text(text),
+        ));
   }
 
   Widget _buildJobsCompleted() {
@@ -126,15 +136,16 @@ class FinancialView extends GetView<FinancialController> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text('Jobs Completed', style: TextStyle(fontSize: 16)),
-        Obx(() => Text('${controller.jobsCompleted}', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
+        Obx(() => Text('${controller.jobsCompleted}',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
       ],
     );
   }
 
   Widget _buildJobList() {
     return Obx(() => Column(
-      children: controller.jobs.map((job) => _buildJobItem(job)).toList(),
-    ));
+          children: controller.jobs.map((job) => _buildJobItem(job)).toList(),
+        ));
   }
 
   Widget _buildJobItem(Job job) {
@@ -152,11 +163,13 @@ class FinancialView extends GetView<FinancialController> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(job.id, style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(job.id,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 4),
                 Row(
                   children: [
-                    const Icon(Icons.calendar_today, size: 16, color: Colors.red),
+                    const Icon(Icons.calendar_today,
+                        size: 16, color: Colors.red),
                     const SizedBox(width: 4),
                     Text(job.date),
                     const SizedBox(width: 8),
@@ -167,7 +180,8 @@ class FinancialView extends GetView<FinancialController> {
                 ),
               ],
             ),
-            Text('RM${job.amount.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text('RM${job.amount.toStringAsFixed(2)}',
+                style: const TextStyle(fontWeight: FontWeight.bold)),
           ],
         ),
       ),

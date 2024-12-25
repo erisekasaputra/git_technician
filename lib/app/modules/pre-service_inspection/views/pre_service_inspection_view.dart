@@ -6,49 +6,49 @@ import 'package:timeline_tile/timeline_tile.dart';
 import '../controllers/pre_service_inspection_controller.dart';
 
 class PreServiceInspectionView extends GetView<PreServiceInspectionController> {
-  const PreServiceInspectionView({Key? key}) : super(key: key);
+  const PreServiceInspectionView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: Padding(
-          padding: const EdgeInsets.fromLTRB(14, 8, 0, 8),
-          child: CustomBackButton(
-            onPressed: () => Get.back(),
+    return PopScope(
+        canPop: false,
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: Padding(
+              padding: const EdgeInsets.fromLTRB(14, 8, 0, 8),
+              child: CustomBackButton(
+                onPressed: () => Get.back(),
+              ),
+            ),
+            leadingWidth: 100,
+            title: const Text(
+              'Service Inspection',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+            centerTitle: true,
           ),
-        ),
-        leadingWidth: 60,
-        title: const Text(
-          'Service Inspection',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildVehicleInfoCard(context),
+                  const SizedBox(height: 20),
+                  _buildBasicInspectionSection(context),
+                  const SizedBox(height: 20),
+                  _buildActionButtons(context),
+                ],
+              ),
+            ),
           ),
-        ),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildVehicleInfoCard(context),
-              // const SizedBox(height: 20),
-              _buildServiceProgress(context),
-              const SizedBox(height: 20),
-              _buildBasicInspectionSection(context),
-              const SizedBox(height: 20),
-              _buildActionButtons(context),
-            ],
-          ),
-        ),
-      ),
-    );
+        ));
   }
 
   Widget _buildVehicleInfoCard(BuildContext context) {
@@ -76,24 +76,33 @@ class PreServiceInspectionView extends GetView<PreServiceInspectionController> {
                   flex: 1,
                   child: Stack(
                     children: [
-                      SizedBox(
-                        height: 260,
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(10),
-                              topLeft: Radius.circular(20),
-                              bottomRight: Radius.circular(20),
-                              bottomLeft: Radius.circular(10),
-                            ),
-                            image: DecorationImage(
-                              image:
-                                  NetworkImage('https://picsum.photos/200/300'),
-                              fit: BoxFit.cover,
+                      Obx(() {
+                        if (controller.commonUrlAssetInternet.value == '' ||
+                            controller.fleet.value?.data.imageUrl == null) {
+                          return const SizedBox(
+                            height: 10,
+                          );
+                        }
+
+                        return SizedBox(
+                          height: 260,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(10),
+                                topLeft: Radius.circular(20),
+                                bottomRight: Radius.circular(20),
+                                bottomLeft: Radius.circular(10),
+                              ),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    '${controller.commonUrlAssetInternet}${controller.fleet.value?.data.imageUrl}'),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
-                      ),
+                        );
+                      }),
                       Positioned(
                         left: 0,
                         bottom: 0,
@@ -127,44 +136,54 @@ class PreServiceInspectionView extends GetView<PreServiceInspectionController> {
                 const SizedBox(width: 16),
                 Expanded(
                   flex: 1,
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Obx(
+                    () {
+                      return ListView(
+                        shrinkWrap: true,
                         children: [
-                          const Text(''),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                padding: EdgeInsets.zero,
-                                icon: const Icon(
-                                  Icons.edit,
-                                  color: Colors.black,
-                                  size: 18,
-                                ),
-                                onPressed: () {},
-                              ),
-                              const Text(
-                                'Edit',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.black),
-                              ),
-                            ],
-                          )
+                          _buildInfoRow(
+                              'Lisence Plate',
+                              controller.homeController?.orderData.value?.data
+                                      .fleets.first.registrationNumber ??
+                                  'NA'),
+                          _buildInfoRow(
+                              'Make',
+                              controller.homeController?.orderData.value?.data
+                                      .fleets.first.brand ??
+                                  'NA'),
+                          _buildInfoRow(
+                              'Model',
+                              controller.homeController?.orderData.value?.data
+                                      .fleets.first.model ??
+                                  'NA'),
+                          _buildInfoRow(
+                              'Year',
+                              (controller.fleet.value?.data.yearOfManufacture
+                                      .toString()) ??
+                                  "N/A"),
+                          _buildInfoRow(
+                              'Odo Meter',
+                              (controller.fleet.value?.data.odometerReading
+                                      .toString()) ??
+                                  "N/A"),
+                          _buildInfoRow(
+                              'Insurance',
+                              (controller.fleet.value?.data.insuranceNumber
+                                      .toString()) ??
+                                  "N/A"),
+                          _buildInfoRow(
+                              'Chassis Number',
+                              (controller.fleet.value?.data.chassisNumber
+                                      .toString()) ??
+                                  "N/A"),
+                          _buildInfoRow(
+                              'Engine Number',
+                              (controller.fleet.value?.data.engineNumber
+                                      .toString()) ??
+                                  "N/A"),
                         ],
-                      ),
-                      _buildInfoRow('Lisence Plate', 'BBC 1234'),
-                      _buildInfoRow('Make', 'Triumph'),
-                      _buildInfoRow('Model', 'Tiger 990'),
-                      _buildInfoRow('Year', '2022'),
-                      _buildInfoRow('Odo Meter', '18,000 KM'),
-                      _buildInfoRow('Insurance', '--'),
-                      _buildInfoRow('Roadtax', '--'),
-                      _buildInfoRow('Chassis Number', '--'),
-                      _buildInfoRow('Engine Number', '--'),
-                    ],
+                      );
+                    },
                   ),
                 ),
               ],
@@ -201,17 +220,6 @@ class PreServiceInspectionView extends GetView<PreServiceInspectionController> {
     );
   }
 
-Widget _buildServiceProgress(BuildContext context) {
-  return Builder(builder: (BuildContext context) {
-    final Color primary_300 = Theme.of(context).colorScheme.primary_300;
-    final Color warning_300 = Theme.of(context).colorScheme.warning_300;
-    return SizedBox(
-      height: 100,
-      child: _buildTimelineTiles(controller.serviceProgress.value, primary_300, warning_300),
-    );
-  });
-}
-
   Widget _buildTimelineTiles(
       ServiceProgress service, Color primary_300, Color warning_300) {
     return Row(
@@ -231,7 +239,7 @@ Widget _buildServiceProgress(BuildContext context) {
                   iconData: service.steps[i].isCompleted
                       ? Icons.check_circle_rounded
                       : Icons.circle,
-                  fontSize: 14,
+                  fontSize: 13,
                 ),
               ),
               beforeLineStyle: LineStyle(
@@ -300,14 +308,17 @@ Widget _buildServiceProgress(BuildContext context) {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 1, horizontal: 10),
-                      child: Column(
-                        children: [
-                          _buildInspectionItem('(F)Tyre', '(F)Tyre', borderInput_01, isLeftSide: false),
-                          _buildInspectionItem('(F)Brake', '(F)Brake', borderInput_01, isLeftSide: false),
-                          _buildInspectionItem('(F)Sprocket', '(F)Sprocket', borderInput_01, isLeftSide: false),
-                          _buildInspectionItem('Chain', 'Chain', borderInput_01, isLeftSide: false),
-                          _buildInspectionItem('Bearing', 'Bearing', borderInput_01, isLeftSide: false),
-                        ],
+                      child: Obx(
+                        () => Column(
+                          children: [
+                            if (controller.basicInspection1.isNotEmpty)
+                              for (var pre in controller.basicInspection1) ...[
+                                _buildInspectionItem(pre.description,
+                                    pre.parameter, borderInput_01,
+                                    isLeftSide: false)
+                              ]
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -317,7 +328,7 @@ Widget _buildServiceProgress(BuildContext context) {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(1),
-                child: Image.network('https://picsum.photos/100/100'),
+                child: Image.asset('assets/images/motor.png'),
               ),
             ),
             Expanded(
@@ -331,14 +342,17 @@ Widget _buildServiceProgress(BuildContext context) {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 1, horizontal: 10),
-                      child: Column(
-                        children: [
-                          _buildInspectionItem('Engine', 'Engine', borderInput_01, isLeftSide: true),
-                          _buildInspectionItem('Lights', 'Lights', borderInput_01, isLeftSide: true),
-                          _buildInspectionItem('(R)Brake', '(R)Brake', borderInput_01, isLeftSide: true),
-                          _buildInspectionItem('(R)Sprocket', '(R)Sprocket', borderInput_01, isLeftSide: true),
-                          _buildInspectionItem('(R)Tyre', '(R)Tyre', borderInput_01, isLeftSide: true),
-                        ],
+                      child: Obx(
+                        () => Column(
+                          children: [
+                            if (controller.basicInspection2.isNotEmpty)
+                              for (var pre in controller.basicInspection2) ...[
+                                _buildInspectionItem(pre.description,
+                                    pre.description, borderInput_01,
+                                    isLeftSide: true)
+                              ]
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -359,125 +373,144 @@ Widget _buildServiceProgress(BuildContext context) {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           if (isLeftSide) _buildDropdown(key, borderInput_01),
-          Text(label,
-              style: const TextStyle(fontSize: 12, color: Colors.black)),
+          Flexible(
+            child: Text(
+              label,
+              style: const TextStyle(fontSize: 12, color: Colors.black),
+              overflow: TextOverflow.clip,
+              maxLines: 2,
+            ),
+          ),
           if (!isLeftSide) _buildDropdown(key, borderInput_01),
         ],
       ),
     );
   }
 
-Widget _buildDropdown(String key, Color borderInput_01) {
-  return Obx(() {
-    final score = controller.inspectionScores[key] ?? 0;
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 6),
-      decoration: BoxDecoration(
-        border: Border.all(color: borderInput_01),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: DropdownButton<int>(
-        value: score,
-        items: List.generate(10, (index) {
-          return DropdownMenuItem(
-            value: index + 1,
-            child: Text((index + 1).toString()),
-          );
-        }),
-        onChanged: (value) {
-          if (value != null) {
-            controller.updateInspectionScore(key, value);
-          }
-        },
-        style: const TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
+  Widget _buildDropdown(String key, Color borderInput_01) {
+    return Obx(() {
+      int index = -1;
+      int score = 0;
+      try {
+        index = controller.basicInspectionScores
+            .indexWhere((inspection) => inspection.parameter == key);
+        score = controller.basicInspectionScores[index].value;
+      } catch (_) {}
+
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 6),
+        decoration: BoxDecoration(
+          border: Border.all(color: borderInput_01),
+          borderRadius: BorderRadius.circular(4),
         ),
-        underline: SizedBox(),
-        icon: SizedBox.shrink(),
-        isDense: true,
-        alignment: AlignmentDirectional.center,
-      ),
-    );
-  });
-}
+        child: DropdownButton<int>(
+          value: score,
+          items: List.generate(11, (index) {
+            return DropdownMenuItem(
+              value: index,
+              child: Text((index).toString()),
+            );
+          }),
+          onChanged: (value) {
+            if (value != null) {
+              controller.updateInspectionScore(key, value);
+            }
+          },
+          style: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+          underline: const SizedBox(),
+          icon: const SizedBox.shrink(),
+          isDense: true,
+          alignment: AlignmentDirectional.center,
+        ),
+      );
+    });
+  }
 
   Widget _buildActionButtons(BuildContext context) {
-  final Color primary_300 = Theme.of(context).colorScheme.primary_300;
+    final Color primary_300 = Theme.of(context).colorScheme.primary_300;
 
-  return Row(
-    children: [
-      Expanded(
-        child: Obx(() => Container(
-          height: 48,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: primary_300),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(15),
-              onTap: controller.isInspectionLoading.value ? null : controller.onInspectionPressed,
-              child: Center(
-                child: controller.isInspectionLoading.value
-                    ? SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(primary_300),
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : Text(
-                        'Inspection',
-                        style: TextStyle(
-                          color: primary_300,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-              ),
-            ),
-          ),
-        )),
-      ),
-      const SizedBox(width: 20),
-      Expanded(
-        child: Obx(() => Container(
-          height: 48,
-          decoration: BoxDecoration(
-            color: primary_300,
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(15),
-              onTap: controller.isNextLoading.value ? null : controller.onNextPressed,
-              child: Center(
-                child: controller.isNextLoading.value
-                    ? const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : const Text(
-                        'Next',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-              ),
-            ),
-          ),
-        )),
-      ),
-    ],
-  );
-}
+    return Row(
+      children: [
+        // Expanded(
+        //   child: Obx(() => Container(
+        //         height: 48,
+        //         decoration: BoxDecoration(
+        //           color: Colors.white,
+        //           border: Border.all(color: primary_300),
+        //           borderRadius: BorderRadius.circular(15),
+        //         ),
+        //         child: Material(
+        //           color: Colors.transparent,
+        //           child: InkWell(
+        //             borderRadius: BorderRadius.circular(15),
+        //             onTap: controller.isInspectionLoading.value
+        //                 ? null
+        //                 : controller.onInspectionPressed,
+        //             child: Center(
+        //               child: controller.isInspectionLoading.value
+        //                   ? SizedBox(
+        //                       width: 24,
+        //                       height: 24,
+        //                       child: CircularProgressIndicator(
+        //                         valueColor:
+        //                             AlwaysStoppedAnimation<Color>(primary_300),
+        //                         strokeWidth: 2,
+        //                       ),
+        //                     )
+        //                   : Text(
+        //                       'Inspection',
+        //                       style: TextStyle(
+        //                         color: primary_300,
+        //                         fontWeight: FontWeight.bold,
+        //                       ),
+        //                     ),
+        //             ),
+        //           ),
+        //         ),
+        //       )),
+        // ),
+        // const SizedBox(width: 20),
+        Expanded(
+          child: Obx(() => Container(
+                height: 48,
+                decoration: BoxDecoration(
+                  color: primary_300,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(15),
+                    onTap: controller.isNextLoading.value
+                        ? null
+                        : controller.onNextPressed,
+                    child: Center(
+                      child: controller.isNextLoading.value
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text(
+                              'Next',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                    ),
+                  ),
+                ),
+              )),
+        ),
+      ],
+    );
+  }
 }

@@ -1,3 +1,20 @@
+buildscript {
+    ext.kotlin_version = "1.8.0"
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:7.0.4"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.8'
+    }
+}
+ 
+plugins {
+    id("com.google.gms.google-services") version "4.3.15" apply false
+} 
+
 allprojects {
     repositories {
         google()
@@ -6,11 +23,16 @@ allprojects {
 }
 
 rootProject.buildDir = "../build"
+
 subprojects {
+    // Atur build directory per modul
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
-subprojects {
-    project.evaluationDependsOn(":app")
+ 
+if (project(":app").projectDir.exists()) {
+    subprojects {
+        project.evaluationDependsOn(":app")
+    }
 }
 
 tasks.register("clean", Delete) {

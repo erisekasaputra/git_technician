@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:santai_technician/app/common/widgets/custom_back_button.dart';
+import 'package:santai_technician/app/routes/app_pages.dart';
 import 'package:santai_technician/app/theme/app_theme.dart';
 import '../controllers/settings_controller.dart';
 
 class SettingsView extends GetView<SettingsController> {
-  const SettingsView({Key? key}) : super(key: key);
+  const SettingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +20,9 @@ class SettingsView extends GetView<SettingsController> {
             onPressed: () => Get.back(),
           ),
         ),
-        leadingWidth: 60,
+        leadingWidth: 100,
         title: const Text(
-          'Settings',
+          'Setting',
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -55,7 +56,7 @@ class SettingsView extends GetView<SettingsController> {
           Column(
             children: [
               const SizedBox(height: 10),
-              Image.asset('assets/images/company_logo.png',
+              Image.asset('assets/images/logo_hd_santaimoto_blue.png',
                   height: 100, width: double.infinity, fit: BoxFit.contain),
               const SizedBox(height: 40),
               Container(
@@ -67,7 +68,7 @@ class SettingsView extends GetView<SettingsController> {
                       color: Colors.grey.withOpacity(0.3),
                       spreadRadius: 1,
                       blurRadius: 3,
-                      offset: Offset(0, 2),
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
@@ -80,13 +81,20 @@ class SettingsView extends GetView<SettingsController> {
                     const SizedBox(height: 50),
                     const Text(
                       'Technician Performance',
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                       textAlign: TextAlign.center,
                     ),
-                    Text(
-                      controller.technicianName.value,
-                      style: TextStyle(fontSize: 16),
-                      textAlign: TextAlign.center,
+                    Obx(
+                      () => Text(
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        controller.userName.value,
+                        style: const TextStyle(fontSize: 12),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     const SizedBox(height: 20),
                   ],
@@ -106,10 +114,23 @@ class SettingsView extends GetView<SettingsController> {
                 ),
                 child: Stack(
                   children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage:
-                          NetworkImage(controller.profileImageUrl.value),
+                    Obx(
+                      () => CircleAvatar(
+                        radius: 50,
+                        backgroundImage:
+                            controller.profileImageUrl.value.isEmpty
+                                ? null
+                                : Image.network(
+                                    '${controller.commonUrl.value}${controller.profileImageUrl.value}',
+                                  ).image,
+                        child: controller.profileImageUrl.value.isEmpty
+                            ? const Icon(
+                                Icons.person,
+                                size: 35,
+                                color: Colors.white,
+                              )
+                            : null,
+                      ),
                     ),
                     Positioned(
                       bottom: -5,
@@ -139,15 +160,18 @@ class SettingsView extends GetView<SettingsController> {
     final Color primary_300 = Theme.of(context).colorScheme.primary_300;
     return Column(
       children: [
+        _buildSettingItem('Profile', Icons.person, primary_300, () {
+          Get.toNamed(Routes.USER_REGISTRATION, arguments: {'isUpdate': true});
+        }),
+        // _buildSettingItem(
+        //     'Certificate', Icons.card_membership, primary_300, () {}),
+        _buildSettingItem('Support', Icons.question_mark, primary_300, () {
+          Get.toNamed(Routes.SUPPORT_SCREEN);
+        }),
         _buildSettingItem(
-            'Technician Details', Icons.person, primary_300, () {}),
-        _buildSettingItem(
-            'Certificate', Icons.card_membership, primary_300, () {}),
-        _buildWalletItem(primary_300),
-        _buildSettingItem('Security', Icons.security, primary_300, () {}),
-        _buildSettingItem(
-            'Merchandise', Icons.shopping_bag, primary_300, () {}),
-        _buildSettingItem('Language', Icons.language, primary_300, () {}),
+            'Sign Out', Icons.card_membership, Colors.red.shade400, () async {
+          await controller.logout();
+        }),
       ],
     );
   }
@@ -156,14 +180,19 @@ class SettingsView extends GetView<SettingsController> {
       String title, IconData icon, Color color, VoidCallback onTap) {
     return Card(
       elevation: 4,
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      shadowColor: Colors.black.withOpacity(0.2),
+      shadowColor: Colors.black.withOpacity(0.1),
       child: ListTile(
-        leading: Icon(icon, color: color),
-        title: Text(title),
+        leading: null,
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontSize: 14,
+          ),
+        ),
         trailing: Icon(Icons.chevron_right, color: color),
         onTap: onTap,
         tileColor: Colors.white,
@@ -177,7 +206,7 @@ class SettingsView extends GetView<SettingsController> {
   Widget _buildWalletItem(Color primary_300) {
     return Card(
       elevation: 4,
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),

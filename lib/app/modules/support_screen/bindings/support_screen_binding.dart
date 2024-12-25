@@ -5,8 +5,8 @@ import '../controllers/support_screen_controller.dart';
 class SupportScreenBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<SupportScreenController>(
-      () => SupportScreenController(),
+    Get.put<SupportScreenController>(
+      SupportScreenController(),
     );
   }
 }

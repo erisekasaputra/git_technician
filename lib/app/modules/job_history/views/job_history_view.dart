@@ -5,7 +5,7 @@ import 'package:santai_technician/app/theme/app_theme.dart';
 import '../controllers/job_history_controller.dart';
 
 class JobHistoryView extends GetView<JobHistoryController> {
-  const JobHistoryView({Key? key}) : super(key: key);
+  const JobHistoryView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class JobHistoryView extends GetView<JobHistoryController> {
             onPressed: () => Get.back(),
           ),
         ),
-        leadingWidth: 60,
+        leadingWidth: 100,
         title: const Text(
           'Job History',
           style: TextStyle(
@@ -60,14 +60,65 @@ class JobHistoryView extends GetView<JobHistoryController> {
             ),
           ),
           Expanded(
-            child: Obx(() => ListView.builder(
-                  itemCount: controller.filteredJobs.length,
-                  itemBuilder: (context, index) {
-                    final job = controller.filteredJobs[index];
-                    return JobCard(
-                        job: job, controller: controller, index: index);
-                  },
-                )),
+            child: Obx(() {
+              return ListView.builder(
+                itemCount: controller.filteredJobs.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == controller.filteredJobs.length) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: Obx(
+                        () => controller.isLoading.value
+                            ? Container(
+                                width: 24, // Anda bisa sesuaikan ukuran
+                                height: 40,
+                                alignment: Alignment.center,
+                                child: const CircularProgressIndicator(
+                                  strokeWidth: 4.0, // Sesuaikan ketebalan garis
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.green), // Warna progress
+                                  backgroundColor: Colors
+                                      .white, // Pastikan backgroundnya transparan
+                                ),
+                              )
+                            : ElevatedButton(
+                                onPressed: controller.isLoading.value
+                                    ? null
+                                    : controller
+                                        .fetchPaginatedOrders, // Disable button if loading
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors
+                                      .transparent, // Set button background to transparent
+                                  overlayColor: Colors
+                                      .transparent, // Set text color when not loading
+                                  shadowColor:
+                                      Colors.transparent, // Remove the shadow
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 12.0,
+                                      horizontal:
+                                          20.0), // Padding for the button
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        1), // Rounded corners
+                                    side: const BorderSide(
+                                        color: Colors.transparent,
+                                        width: 0), // Border color
+                                  ),
+                                ),
+                                child: const Text('Load More'),
+                              ),
+                      ),
+                    );
+                  }
+                  final job = controller.filteredJobs[index];
+                  return JobCard(
+                    job: job,
+                    controller: controller,
+                    index: index,
+                  );
+                },
+              );
+            }),
           ),
         ],
       ),
@@ -81,11 +132,10 @@ class JobCard extends StatelessWidget {
   final int index;
 
   const JobCard(
-      {Key? key,
+      {super.key,
       required this.job,
       required this.controller,
-      required this.index})
-      : super(key: key);
+      required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -103,9 +153,15 @@ class JobCard extends StatelessWidget {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(job.title,
+                  Expanded(
+                    child: Text(
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      job.title,
                       style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18)),
+                          fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                  ),
                   Icon(
                     isExpanded
                         ? Icons.keyboard_arrow_down
@@ -148,7 +204,12 @@ class JobCard extends StatelessWidget {
                       const Icon(Icons.location_on,
                           size: 16, color: Colors.red),
                       const SizedBox(width: 4),
-                      Text(job.location),
+                      Expanded(
+                        child: Text(
+                          job.location,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      )
                     ],
                   ),
                 ],
@@ -168,11 +229,11 @@ class JobCard extends StatelessWidget {
                       color: Colors.black.withOpacity(0.1),
                       spreadRadius: 2,
                       blurRadius: 5,
-                      offset: Offset(0, 3),
+                      offset: const Offset(0, 3),
                     ),
                   ],
                 ),
-                child: Text(job.description),
+                child: Text(job.description.isEmpty ? 'N/A' : job.description),
               ),
           ],
         );

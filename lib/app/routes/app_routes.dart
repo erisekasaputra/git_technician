@@ -25,6 +25,11 @@ abstract class Routes {
   static const LOGIN = _Paths.LOGIN;
   static const REGISTER_OTP = _Paths.REGISTER_OTP;
   static const SPLASH_SCREEN = _Paths.SPLASH_SCREEN;
+  static const CHAT_MENU = _Paths.CHAT_MENU;
+  static const CHAT_CONVERSATION = _Paths.CHAT_CONVERSATION;
+  static const CHAT_CONTACT = _Paths.CHAT_CONTACT;
+  static const FORGOT_PASSWORD = _Paths.FORGOT_PASSWORD;
+  static const CHANGE_PASSWORD = _Paths.CHANGE_PASSWORD;
 }
 
 abstract class _Paths {
@@ -51,4 +56,9 @@ abstract class _Paths {
   static const LOGIN = '/login';
   static const REGISTER_OTP = '/register-otp';
   static const SPLASH_SCREEN = '/splash-screen';
+  static const CHAT_MENU = '/chat-menu';
+  static const CHAT_CONVERSATION = '/chat-conversation';
+  static const CHAT_CONTACT = '/chat-contact';
+  static const FORGOT_PASSWORD = '/forgot-password';
+  static const CHANGE_PASSWORD = '/change-password';
 }

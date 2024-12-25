@@ -2,6 +2,14 @@ import 'package:get/get.dart';
 
 import '../modules/booking_accepted/bindings/booking_accepted_binding.dart';
 import '../modules/booking_accepted/views/booking_accepted_view.dart';
+import '../modules/change_password/bindings/change_password_binding.dart';
+import '../modules/change_password/views/change_password_view.dart';
+import '../modules/chat_contact/bindings/chat_contact_binding.dart';
+import '../modules/chat_contact/views/chat_contact_view.dart';
+import '../modules/chat_conversation/bindings/chat_conversation_binding.dart';
+import '../modules/chat_conversation/views/chat_conversation_view.dart';
+import '../modules/chat_menu/bindings/chat_menu_binding.dart';
+import '../modules/chat_menu/views/chat_menu_view.dart';
 import '../modules/congrats/bindings/congrats_binding.dart';
 import '../modules/congrats/views/congrats_view.dart';
 import '../modules/congratulation/bindings/congratulation_binding.dart';
@@ -12,6 +20,8 @@ import '../modules/detail_inspection/bindings/detail_inspection_binding.dart';
 import '../modules/detail_inspection/views/detail_inspection_view.dart';
 import '../modules/financial/bindings/financial_binding.dart';
 import '../modules/financial/views/financial_view.dart';
+import '../modules/forgot_password/bindings/forgot_password_binding.dart';
+import '../modules/forgot_password/views/forgot_password_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/job_checklist/bindings/job_checklist_binding.dart';
@@ -92,7 +102,7 @@ class AppPages {
       page: () => const CongratsView(),
       binding: CongratsBinding(),
       transition: Transition.rightToLeft,
-      transitionDuration: durationTransision, 
+      transitionDuration: durationTransision,
     ),
     GetPage(
       name: _Paths.CONGRATULATION,
@@ -196,6 +206,31 @@ class AppPages {
       binding: SplashScreenBinding(),
       transition: Transition.fadeIn,
       transitionDuration: durationTransision,
+    ),
+    GetPage(
+      name: _Paths.CHAT_MENU,
+      page: () => const ChatMenuView(),
+      binding: ChatMenuBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHAT_CONVERSATION,
+      page: () => const ChatConversationView(),
+      binding: ChatConversationBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHAT_CONTACT,
+      page: () => const ChatContactView(),
+      binding: ChatContactBinding(),
+    ),
+    GetPage(
+      name: _Paths.FORGOT_PASSWORD,
+      page: () => const ForgotPasswordView(),
+      binding: ForgotPasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHANGE_PASSWORD,
+      page: () => const ChangePasswordView(),
+      binding: ChangePasswordBinding(),
     ),
   ];
 }

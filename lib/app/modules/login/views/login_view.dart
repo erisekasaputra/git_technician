@@ -5,207 +5,200 @@ import 'package:santai_technician/app/common/widgets/custom_elvbtn_001.dart';
 import 'package:santai_technician/app/common/widgets/custom_label_001.dart';
 import 'package:santai_technician/app/common/widgets/custom_phone_field.dart';
 import 'package:santai_technician/app/common/widgets/custom_pswd_field.dart';
-import 'package:santai_technician/app/common/widgets/custom_text_field.dart';
 import 'package:santai_technician/app/routes/app_pages.dart';
 import 'package:santai_technician/app/theme/app_theme.dart';
 
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
-  const LoginView({Key? key}) : super(key: key);
+  const LoginView({super.key});
+  @override
   @override
   Widget build(BuildContext context) {
-
-    final Color borderColor = Theme.of(context).colorScheme.borderInput_01;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(16.0),
-            color: Colors.white,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 50),
-                Image.asset('assets/images/company_logo.png', width: 200, height: 200),
-                const Text(
-                  'Welcome Back',
-                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  'Login to your account',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
-                const SizedBox(height: 20),
-                Obx(() => Column(
-                  children: [
-                    if (controller.isStaffLogin.value) ...[
-                      const SizedBox(height: 10),
-                      const CustomLabel(text: 'Business Code'),
-                      const SizedBox(height: 5),
-                      CustomTextField(
-                        controller: controller.businessCodeController,
-                        hintText: 'Enter business code',
-                        icon: Icons.business_center,
-                      ),
-                    ],
-                    const SizedBox(height: 10),
-                    const CustomLabel(text: 'Phone'),
-                    const SizedBox(height: 5),
-                    CustomPhoneField(
-                      hintText: 'Enter your phone number',
-                      controller: controller.phoneController,
-                      onChanged: controller.updatePhoneInfo,
-                    ),
-                    const CustomLabel(text: 'Password'),
-                    const SizedBox(height: 5),
-                    CustomPasswordField(
-                      controller: controller.passwordController,
-                      isPasswordHidden: controller.isPasswordHidden,
-                    ),
-                    
-                  ],
-                )),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'Forgot password?',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Obx(() => CustomElevatedButton(
-                  text: controller.isStaffLogin.value ? 'Staff Log In' : 'Log In',
-                  onPressed: controller.isLoading.value
-                    ? null
-                    : (controller.isStaffLogin.value ? controller.signInAsStaff : controller.login),
-                  isLoading: controller.isLoading.value,
-                )),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 1,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        "Or",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        height: 1,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        Card(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(color: borderColor, width: 1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: IconButton(
-                            icon: Image.asset('assets/images/google_logo.png', width: 30, height: 30),
-                            onPressed: controller.signInWithGoogle,
-                          ),
-                        ),
-                        // const Text('Sign in with Google'),
-                      ],
-                    ),
-                    // const SizedBox(width: 10),
-                    // Column(
-                    //   children: [
-                    //     Card(
-                    //       color: Colors.white,
-                    //       shape: RoundedRectangleBorder(
-                    //         side: BorderSide(color: borderColor, width: 1),
-                    //         borderRadius: BorderRadius.circular(8),
-                    //       ),
-                    //       child: IconButton(
-                    //         icon: Image.asset('assets/images/facebook_logo.png', width: 30, height: 30),
-                    //         onPressed: controller.signInWithGoogle,
-                    //       ),
-                    //     ),
-                    //     // const Text('Sign in with Facebook'),
-                    //   ],
-                    // ),
-                    const SizedBox(width: 10),
-                    Column(
-                      children: [
-                        Card(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(color: borderColor, width: 1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: IconButton(
-                            icon: const Icon(Icons.business_center, size: 30, color: Colors.black),
-                            onPressed: controller.toggleStaffLogin,
-                          ),
-                        ),
-                        // Obx(() => Text(controller.isStaffLogin.value ? 'Switch to User' : 'Sign in as Staff')),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Don't have an account?",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Get.toNamed(Routes.SIGN_UP);
-                        },
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.black,
-                        ),
-                        child: RichText(
-                          text: TextSpan(
-                            style: const TextStyle(
-                              fontSize: 16, 
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black,
+        child: LayoutBuilder(builder: (context, constraints) {
+          return Stack(
+            children: [
+              SingleChildScrollView(
+                physics: const ClampingScrollPhysics(),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: IntrinsicHeight(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: constraints.maxHeight * 0.17,
+                            child: Image.asset(
+                              'assets/images/logo_hd_santaimoto_blue.png',
+                              fit: BoxFit.contain,
                             ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            'Welcome Back',
+                            style: TextStyle(
+                              color: Colors.grey.shade900,
+                              fontSize: constraints.maxHeight * 0.045,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            'Login to your account',
+                            style: TextStyle(
+                              color: Colors.grey.shade900,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Column(
                             children: [
-                              TextSpan(text: "Sign Up ", style: TextStyle(color: Theme.of(context).colorScheme.primary_100)),
-                              const TextSpan(text: "with mobile phone"),
+                              const CustomLabel(
+                                text: 'Phone Number',
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              const SizedBox(height: 5),
+                              CustomPhoneField(
+                                hintText: 'Enter Phone Number',
+                                controller: controller.phoneController,
+                                onChanged: controller.updatePhoneInfo,
+                                error: controller.errorValidation,
+                              ),
+                              const CustomLabel(
+                                text: 'Password',
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              const SizedBox(height: 5),
+                              CustomPasswordField(
+                                controller: controller.passwordController,
+                                isPasswordHidden: controller.isPasswordHidden,
+                                fieldName: "Password",
+                                error: controller.errorValidation,
+                              ),
                             ],
                           ),
-                        ),
+                          Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton(
+                                  onPressed: () {
+                                    Get.toNamed(Routes.FORGOT_PASSWORD);
+                                  },
+                                  child: const Text(
+                                    'Forgot password?',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              CustomElevatedButton(
+                                text: 'Log In',
+                                onPressed: controller.isLoading.value
+                                    ? null
+                                    : controller.login,
+                                isLoading: controller.isLoading.value,
+                                height: 48,
+                              ),
+                              const SizedBox(height: 20),
+                              const Row(
+                                children: [
+                                  Expanded(
+                                    child: Divider(
+                                      color: Colors.grey, // Line color
+                                      thickness: 1, // Line thickness
+                                      indent: 3, // Left space before line
+                                      endIndent: 15, // Right space after line
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: Text(
+                                      'Or',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Divider(
+                                      color: Colors.grey,
+                                      thickness: 1,
+                                      indent: 15,
+                                      endIndent: 3,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  "Dont have an Account ",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontFamily: 'Saira',
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(Routes.SIGN_UP);
+                                  },
+                                  child: const Text(
+                                    "Sign Up",
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontFamily: 'Saira',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blueAccent,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                const Text(
+                                  "with mobile phone",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontFamily: 'Saira',
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-                const SizedBox(height: 5),
-              ],
-            ),
-          ),
-        ),
+              ),
+              // Sticky icon on top-right corner
+            ],
+          );
+        }),
       ),
     );
   }

@@ -8,13 +8,13 @@ class CustomLabel extends StatelessWidget {
   final FontWeight fontWeight;
 
   const CustomLabel({
-    Key? key,
+    super.key,
     required this.text,
     this.textAlign = TextAlign.left,
     this.textColor = Colors.black,
     this.fontSize = 16,
     this.fontWeight = FontWeight.normal,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +27,7 @@ class CustomLabel extends StatelessWidget {
           fontSize: fontSize,
           color: textColor,
           fontFamily: 'Saira',
+          fontWeight: fontWeight,
         ),
       ),
     );

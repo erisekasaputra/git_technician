@@ -4,31 +4,47 @@ import 'package:santai_technician/app/theme/app_theme.dart';
 
 class CustomBackButton extends StatelessWidget {
   final VoidCallback? onPressed;
+  final String text;
 
-  const CustomBackButton({Key? key, this.onPressed}) : super(key: key);
+  const CustomBackButton({
+    super.key,
+    this.onPressed,
+    this.text = 'Back',
+  });
 
   @override
   Widget build(BuildContext context) {
-
-    final Color effectiveBackgroundColor = Theme.of(context).colorScheme.primary_300;
-    final Color effectiveBackgroundColor2 = Theme.of(context).colorScheme.primary_100;
+    final Color effectiveBackgroundColor =
+        Theme.of(context).colorScheme.primary_300;
 
     return GestureDetector(
-      onTap: onPressed ?? () => Get.back(),
+      onTap: onPressed ??
+          () {
+            if (Get.isDialogOpen ?? false) {
+              Get.back();
+            } else {
+              Get.back(closeOverlays: true);
+            }
+          },
       child: Container(
-        width: 20,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [effectiveBackgroundColor2, effectiveBackgroundColor],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: effectiveBackgroundColor,
           borderRadius: BorderRadius.circular(15),
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.arrow_back_ios, color: Colors.white, size: 20, weight: 4),
+            Icon(text == 'Back' ? Icons.arrow_back : Icons.arrow_right,
+                color: Colors.white, size: 16, weight: 2),
+            const SizedBox(width: 4),
+            Text(
+              text,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+              ),
+            ),
           ],
         ),
       ),

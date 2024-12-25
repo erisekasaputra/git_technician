@@ -1,0 +1,4 @@
+enum PercentageOrValueType {
+  percentage,
+  value,
+}

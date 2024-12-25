@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:santai_technician/app/utils/session_manager.dart';
 
 class DeviceInfoController extends GetxController {
   final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+  final SessionManager sessionManager = SessionManager();
   final deviceId = RxString('');
 
   @override
@@ -14,13 +14,15 @@ class DeviceInfoController extends GetxController {
   }
 
   Future<void> getDeviceId() async {
-    String? storedDeviceId = await secureStorage.read(key: 'device_id');
+    String? storedDeviceId =
+        await sessionManager.getSessionBy(SessionManagerType.deviceId);
 
-    if (storedDeviceId != null) {
+    if (storedDeviceId.isNotEmpty) {
       deviceId.value = storedDeviceId;
     } else {
       String newDeviceId = await _generateDeviceId();
-      await secureStorage.write(key: 'device_id', value: newDeviceId);
+      await sessionManager.setSessionBy(
+          SessionManagerType.deviceId, newDeviceId);
       deviceId.value = newDeviceId;
     }
   }

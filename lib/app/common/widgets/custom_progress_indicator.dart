@@ -9,14 +9,14 @@ class CustomProgressIndicator extends StatelessWidget {
   final double spacing;
 
   const CustomProgressIndicator({
-    Key? key,
+    super.key,
     required this.totalSteps,
     required this.currentStep,
     this.activeColor = Colors.blue,
     this.inactiveColor = Colors.grey,
     this.height = 3,
     this.spacing = 4,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,8 @@ class GradientProgressPainter extends CustomPainter {
     // Draw background
     paint.color = backgroundColor;
     canvas.drawRRect(
-      RRect.fromRectAndRadius(Offset.zero & size, Radius.circular(size.height / 2)),
+      RRect.fromRectAndRadius(
+          Offset.zero & size, Radius.circular(size.height / 2)),
       paint,
     );
 

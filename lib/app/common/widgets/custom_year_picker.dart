@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:santai_technician/app/common/widgets/custom_text_field.dart';
+import 'package:santai_technician/app/data/models/common/base_error.dart';
 import 'package:santai_technician/app/theme/app_theme.dart';
 
 class CustomYearPicker extends StatelessWidget {
   final TextEditingController controller;
   final int startYear;
   final String hintText;
+  final String fieldName;
+  final Rx<ErrorResponse?> error;
 
   const CustomYearPicker({
-    Key? key,
+    super.key,
     required this.controller,
     this.startYear = 1900,
     this.hintText = 'Year',
-  }) : super(key: key);
+    required this.fieldName,
+    required this.error,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +30,17 @@ class CustomYearPicker extends StatelessWidget {
           icon: Icons.calendar_today,
           controller: controller,
           keyboardType: TextInputType.number,
+          fieldName: fieldName,
+          error: error,
         ),
       ),
     );
   }
 
   Future<void> _showYearPicker(BuildContext context) async {
-
     final Color button_text_01 = Theme.of(context).colorScheme.button_text_01;
     final Color primary_100 = Theme.of(context).colorScheme.primary_100;
     final Color primary_300 = Theme.of(context).colorScheme.primary_300;
-
 
     final int currentYear = DateTime.now().year;
     final int? selectedYear = await showDialog<int>(
@@ -47,7 +53,7 @@ class CustomYearPicker extends StatelessWidget {
               style: TextStyle(
                 color: primary_300,
                 fontSize: 26,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
@@ -58,7 +64,7 @@ class CustomYearPicker extends StatelessWidget {
           ),
           content: SizedBox(
             width: double.maxFinite,
-            height: 300, 
+            height: 300,
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
@@ -78,7 +84,7 @@ class CustomYearPicker extends StatelessWidget {
                       child: Text(
                         year.toString(),
                         style: TextStyle(
-                          color: button_text_01, 
+                          color: button_text_01,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),

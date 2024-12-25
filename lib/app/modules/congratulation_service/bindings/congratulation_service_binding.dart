@@ -5,8 +5,8 @@ import '../controllers/congratulation_service_controller.dart';
 class CongratulationServiceBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<CongratulationServiceController>(
-      () => CongratulationServiceController(),
+    Get.put<CongratulationServiceController>(
+      CongratulationServiceController(),
     );
   }
 }

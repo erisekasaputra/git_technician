@@ -5,7 +5,7 @@ import 'package:santai_technician/app/theme/app_theme.dart';
 import '../controllers/support_screen_controller.dart';
 
 class SupportScreenView extends GetView<SupportScreenController> {
-  const SupportScreenView({Key? key}) : super(key: key);
+  const SupportScreenView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,16 +14,17 @@ class SupportScreenView extends GetView<SupportScreenController> {
     final Color primary_100 = Theme.of(context).colorScheme.primary_100;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(14, 8, 0, 8),
           child: CustomBackButton(
-            onPressed: () => Get.back(),
+            onPressed: () => Get.back(closeOverlays: true),
           ),
         ),
-        leadingWidth: 60,
+        leadingWidth: 100,
         title: const Text(
           'Support',
           style: TextStyle(
@@ -49,11 +50,13 @@ class SupportScreenView extends GetView<SupportScreenController> {
 
   Widget _buildFAQList(Color borderInput_01, Color primary_300) {
     return Column(
-      children: controller.faqItems.map((item) => _buildFAQItem(item, borderInput_01, primary_300)).toList(),
+      children: controller.faqItems
+          .map((item) => _buildFAQItem(item, borderInput_01, primary_300))
+          .toList(),
     );
   }
 
-  Widget _buildFAQItem(String question, Color borderInput_01, Color primary_300) {
+  Widget _buildFAQItem(FaqItem faq, Color borderInput_01, Color primary_300) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
@@ -70,12 +73,46 @@ class SupportScreenView extends GetView<SupportScreenController> {
           ),
         ],
       ),
-      child: ListTile(
-        title: Text(question, style: const TextStyle(color: Colors.black)),
-        trailing: Icon(Icons.chevron_right, color: primary_300, weight: 2),
-        onTap: () {
-          // Handle FAQ item tap
-        },
+      child: Column(
+        children: [
+          // The FAQ question tile
+          Obx(() {
+            return ListTile(
+              title: Text(
+                faq.question,
+                style: const TextStyle(color: Colors.black),
+              ),
+              trailing: Icon(
+                controller.expandedIndex.value == faq.id
+                    ? Icons.expand_less
+                    : Icons.expand_more,
+                color: primary_300,
+                weight: 2,
+              ),
+              onTap: () {
+                controller.toggleExpanded(faq.id);
+              },
+            );
+          }),
+
+          Obx(() {
+            if (controller.expandedIndex.value == faq.id) {
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Align(
+                  alignment: Alignment.centerLeft, // Align text to the left
+                  child: Text(
+                    faq.answer, // Display the answer when expanded
+                    style: const TextStyle(color: Colors.black54),
+                  ),
+                ),
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          }),
+        ],
       ),
     );
   }

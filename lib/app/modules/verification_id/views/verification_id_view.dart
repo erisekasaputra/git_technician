@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:santai_technician/app/theme/app_theme.dart';
+import 'package:santai_technician/app/utils/nullable_response_builder.dart';
 import '../controllers/verification_id_controller.dart';
 import 'package:santai_technician/app/common/widgets/custom_progress_indicator.dart';
 import 'package:santai_technician/app/common/widgets/custom_image_uploader.dart';
 import 'package:santai_technician/app/common/widgets/custom_elvbtn_001.dart';
 
 class VerificationIdView extends GetView<VerificationIdController> {
-  const VerificationIdView({Key? key}) : super(key: key);
+  const VerificationIdView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,10 @@ class VerificationIdView extends GetView<VerificationIdController> {
                 const SizedBox(height: 10),
                 const Text(
                   'We need a photo of your National ID',
-                  style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 10),
                 const Text(
@@ -55,30 +59,42 @@ class VerificationIdView extends GetView<VerificationIdController> {
                   style: TextStyle(fontSize: 16),
                 ),
                 const SizedBox(height: 10),
-                _buildInstructionItem(Icons.crop_free, 'Place it onf a flat surface'),
+                _buildInstructionItem(
+                    Icons.crop_free, 'Place it onf a flat surface'),
                 const SizedBox(height: 5),
-                _buildInstructionItem(Icons.blur_off, 'Avoid glare, shaking, and blur'),
+                _buildInstructionItem(
+                    Icons.blur_off, 'Avoid glare, shaking, and blur'),
                 const SizedBox(height: 20),
                 Obx(() => CustomImageUploader(
-                  selectedImage: controller.frontIdImage.value,
-                  onImageSourceSelected: (source) => controller.pickImage(source, true),
-                  height: 150,
-                  uploadText: 'Front',
-                )),
+                      selectedImage: controller.userRegController
+                          ?.nationalIdentityFrontIdImage.value,
+                      onImageSourceSelected: (source) =>
+                          controller.pickImage(source, true),
+                      height: 150,
+                      fieldName: "NationalIdentity.FrontSideImageUrl",
+                      error: controller.userRegController?.errorValidation ??
+                          getNonNullResponse(),
+                    )),
                 const SizedBox(height: 20),
                 Obx(() => CustomImageUploader(
-                  selectedImage: controller.backIdImage.value,
-                  onImageSourceSelected: (source) => controller.pickImage(source, false),
-                  height: 150,
-                  uploadText: 'Back',
-                )),
+                      selectedImage: controller
+                          .userRegController?.nationalIdentityBackIdImage.value,
+                      onImageSourceSelected: (source) =>
+                          controller.pickImage(source, false),
+                      height: 150,
+                      fieldName: "NationalIdentity.BackSideImageUrl",
+                      error: controller.userRegController?.errorValidation ??
+                          getNonNullResponse(),
+                    )),
                 const SizedBox(height: 30),
                 Obx(() => CustomElevatedButton(
-                  text: 'Next',
-                  // onPressed: controller.canProceed.value ? controller.onNextPressed : null,
-                  onPressed: controller.isLoading.value ? null : controller.onNextPressed,
-                  isLoading: controller.isLoading.value,
-                )),
+                      text: 'Next',
+                      // onPressed: controller.canProceed.value ? controller.onNextPressed : null,
+                      onPressed: controller.isLoading.value
+                          ? null
+                          : controller.onNextPressed,
+                      isLoading: controller.isLoading.value,
+                    )),
               ],
             ),
           ),
